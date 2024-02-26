@@ -1,4 +1,4 @@
-                                              ## Preperring 1
+## 1 Preparing yandex-cloud 
 
 - download terraform 
 - unzip terraform and move to /usr/bin/
@@ -65,5 +65,5 @@ provider_installation {
   }
 }
 ```
-                                              ## 2 Create file terraform for cluster k8s
+## 2 Create file terraform for cluster k8s
 
