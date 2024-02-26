@@ -1,4 +1,4 @@
-## 1 Preparing yandex-cloud 
+## 1.Preparing yandex-cloud 
 
 - download terraform 
 - unzip terraform and move to /usr/bin/
@@ -68,7 +68,7 @@ provider_installation {
 }
 
 ```
-## 2 Create yandex provider terraform cluster
+## 2.Create yandex provider terraform cluster
 
 - add yandex provider and 
 ```
@@ -99,3 +99,23 @@ Initializing provider plugins...
 
 Terraform has been successfully initialized!
 ```
+## 3.Create virtual network for k8s (vpc)
+-create vpc zone ru-central1-a
+```
+resource "yandex_vpc_network" "default" {
+      name   = "vpc.k8s.network"
+description  = "virtual network cluster k8s for ru-central1-a"
+       }
+```
+## 4.Create subnets for my network
+- create subnet cluster-subnet-a
+```
+resource "yandex_vpc_subnet" "cluster-subnet-a" {
+         name  = "vpc.k8s.subnet"
+   description = "subnet for cluster k8s"
+v4_cidr_blocks = ["192.168.49.0/28"]
+          zone = "ru-central1-a"
+    network_id = "enpsm794i9o9rhvshgvi"
+}
+```
+terraform apply :)
