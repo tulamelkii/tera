@@ -17,8 +17,7 @@ yc iam service-account create --name <имя_сервисного_аккаунт
 ```
 - add role for sa
 ```
-yc resource-manager <category_resources> add-access-binding <name_resources> \
-  --role <indeficator_role> \
+yc resource-manager <category_resources> add-access-binding <name_resources> --role <indeficator_role> 
   --subject serviceAccount:<identificator_service_account>
 ```
 - list service account
@@ -31,11 +30,10 @@ yc iam service-account list
 +----------------------+----------+
 ```
 - create iam key for service account
+yc iam service-account list <id acc>
+yc resource-manager folder list <folder id>
 ```
-yc iam key create \
-  --service-account-id <id account> \             # yc iam service-account list
-  --folder-name <name folder service account> \   #   yc resource-manager folder list
-  --output key.json
+yc iam key create --service-account-id <id account> --folder-name <name folder service account> --output key.json
 ```
 - create profile for yandex cli
 ```
@@ -57,7 +55,7 @@ export YC_TOKEN=$(yc iam create-token)
 export YC_CLOUD_ID=$(yc config get cloud-id)
 export YC_FOLDER_ID=$(yc config get folder-id)
 ```
-- create folder for yandex-cloud provaider .terraformrc
+- create folder for yandex-cloud provaider .terraformrc and move [cp .terraformrc /home/user/]
 ```
 provider_installation {
   network_mirror {
@@ -68,18 +66,21 @@ provider_installation {
     exclude = ["registry.terraform.io/*/*"]
   }
 }
-```
-## 2 Create file terraform for cluster k8s and move [cp .terraformrc /home/user/]
 
-- add yandex provider
+```
+## 2 Create yandex provider terraform cluster
+
+- add yandex provider and 
 ```
 terraform {
   required_providers {
-    yandex = {
+      yandex = {
       source = "yandex-cloud/yandex"
-    }
-  required_version = ">= 0.13"
-}
+               }
+            } 
+   required_version = ">= 0.13"
+         }
+
 ```
 - where we use zone
 ```
@@ -87,4 +88,14 @@ terraform {
 provider "yandex" {
    zone      = "ru-central1-a" #a,b,c,d
 }
+```
+terraform init
+```
+Initializing the backend...
+
+Initializing provider plugins...
+- Reusing previous version of yandex-cloud/yandex from the dependency lock file
+- Using previously-installed yandex-cloud/yandex v0.108.1
+
+Terraform has been successfully initialized!
 ```
