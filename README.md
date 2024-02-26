@@ -47,6 +47,10 @@ yc config set service-account-key key.json       # use save .../key.json
 yc config set cloud-id <id_cloud>                #  yc resource-manager cloud list
 yc config set folder-id <folder id>              #  yc resource-manager folder list
 ```
+- config set key for serrvice account
+```
+ yc config set service-account-key ...key.json
+```
 - export to env
 ```
 export YC_TOKEN=$(yc iam create-token)
@@ -65,7 +69,8 @@ provider_installation {
   }
 }
 ```
-## 2 Create file terraform for cluster k8s
+## 2 Create file terraform for cluster k8s and move [cp .terraformrc /home/user/]
+
 - add yandex provider
 ```
 terraform {
