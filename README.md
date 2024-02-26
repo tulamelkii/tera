@@ -89,7 +89,7 @@ provider "yandex" {
    zone      = "ru-central1-a" #a,b,c,d
 }
 ```
-terraform init
+- terraform init
 ```
 Initializing the backend...
 
