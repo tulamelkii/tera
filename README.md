@@ -99,8 +99,8 @@ Initializing provider plugins...
 
 Terraform has been successfully initialized!
 ```
-## 3.PREFERENCES FOR YANDEX-CLOUD              
-#  3.1Create virtual network for k8s (vpc)
+# 3.PREFERENCES FOR YANDEX-CLOUD              
+##  3.1Create virtual network for k8s (vpc)
 -create vpc zone ru-central1-a
 ```
 resource "yandex_vpc_network" "network" {
@@ -108,7 +108,7 @@ resource "yandex_vpc_network" "network" {
   description = "virtual network cluster k8s for ru-central1-a"
       }
 ```
-#  3.2.Create subnets for my network
+##  3.2.Create subnets for my network
 - create subnet 
 ```
 resource "yandex_vpc_subnet" "subnet" {
@@ -119,14 +119,14 @@ resource "yandex_vpc_subnet" "subnet" {
   network_id     = yandex_vpc_network.network.id
 }
 ```
-#  3.3. Create service account for teraform, who started computer instance group
+##  3.3. Create service account for teraform, who started computer instance group
 ```
 resource "yandex_iam_service_account" "tera" {
   name         = "tera"
   description  = "service account ks8"
 }
 ```
-# 3.4. Create member account tera for folder k8s.Add rules for folder
+## 3.4. Create member account tera for folder k8s.Add rules for folder
 ```
 resource "yandex_resourcemanager_folder_iam_member" "editor" {
   folder_id  = "b1gahuuq85502ap2q4im"                                    # id folder k8s
@@ -135,8 +135,8 @@ resource "yandex_resourcemanager_folder_iam_member" "editor" {
   depends_on = [ yandex_iam_service_account.tera]                        # first must create service acc after add to folder
 }
 ```
-## 4. PREFERENCE INSTANCE 
-# 4.1 Create istance group for control plane nodes
+# 4. PREFERENCE INSTANCE 
+## 4.1 Create istance group for control plane nodes
 ```
 resource "yandex_compute_instance_group" "control" {
   name               = "control"                                             #name group
@@ -144,7 +144,7 @@ resource "yandex_compute_instance_group" "control" {
   service_account_id = "${yandex_iam_service_account.tera.id}"               # service acc who member this group
   depends_on         = [yandex_resourcemanager_folder_iam_member.editor]     # first create folder and after group
 ```
-# 4.2 Create template instance(characteristics) memory and cores
+## 4.2 Create template instance(characteristics) memory and cores
 ```
 instance_template {
   resources {
@@ -152,7 +152,7 @@ instance_template {
   cores  = 2
 }
 ```
-# 4.3 Create boot disk for  boot image (debian and size boot 15 gb)
+## 4.3 Create boot disk for  boot image (debian and size boot 15 gb)
 ```
 boot_disk {
   mode = "READ_WRITE"                #option 
