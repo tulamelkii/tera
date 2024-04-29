@@ -13,7 +13,7 @@ curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
 ```
 - create service account for yandex-cloud
 ```
-yc iam service-account create --name <имя_сервисного_аккаунта>
+yc iam service-account create --name <name_service_account>
 ```
 - add role for sa
 ```
