@@ -162,3 +162,5 @@ initialize_params {
    }
  }
 
+
+ yc compute image list --folder-id standard-images
