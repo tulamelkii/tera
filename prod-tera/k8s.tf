@@ -54,7 +54,6 @@ resource "yandex_compute_instance_group" "contral" {
   depends_on          = [ yandex_resourcemanager_folder_iam_member.admin ]
 
 instance_template {
-#  # platform_id = "standard-v1"
    resources {
      memory = 2
      cores  = 2
@@ -95,6 +94,9 @@ deploy_policy {
      max_expansion   = 0
   }
 }
+
+### Instance group Worker
+
 resource "yandex_compute_instance_group" "worker" {
   folder_id           = "b1g89cjo0roopb2d5s14"
   name                = "worker"
