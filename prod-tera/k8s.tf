@@ -45,7 +45,7 @@ resource "yandex_vpc_subnet" "vpc_k8s_sub" {
    zone           = "ru-central1-a"
 }
 #
-###### Instance group control
+### Instance group control
 ##
 resource "yandex_compute_instance_group" "contral" {
   folder_id           = "b1g89cjo0roopb2d5s14"
@@ -143,8 +143,6 @@ deploy_policy {
     max_expansion   = 0
   }
 }
-
-
 
 
 
