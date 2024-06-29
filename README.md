@@ -11,6 +11,15 @@ on linux_amd64
 ```
 curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
 ```
+init profile
+```
+yc init
+```
+[2] Create a new profile
+- enter name
+- go to linc and copy token
+- create folder
+
 - create service account for yandex-cloud
 ```
 yc iam service-account create --name <name_service_account>
