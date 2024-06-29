@@ -1,10 +1,10 @@
-install terraform
-install yandex cloud
-create user profile(main user) ##yc init
-create service account ##yc iam service-account create --name <name_service_account>
-add roles to service account ## yc resource-manager <category_resources/folder/cloud> add-access-binding <name_folder> --role <editor> 
+- install terraform
+- install yandex cloud
+- create user profile(main user) ##yc init
+- create service account ##yc iam service-account create --name <name_service_account>
+- add roles to service account ## yc resource-manager <category_resources/folder/cloud> add-access-binding <name_folder> --role <editor> 
   --subject serviceAccount:<id_service_account>
-create key for cervice account  ## yc iam key create --service-account-id <id account> --folder-name <name folder service account> --output key.json
+- create key for cervice account  ## yc iam key create --service-account-id <id account> --folder-name <name folder service account> --output key.json
 
 
 
