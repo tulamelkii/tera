@@ -1,3 +1,13 @@
+install terraform
+install yandex cloud
+create user profile(main user) ##yc init
+create service account ##yc iam service-account create --name <name_service_account>
+add roles to service account ## yc resource-manager <category_resources/folder/cloud> add-access-binding <name_folder> --role <editor> 
+  --subject serviceAccount:<id_service_account>
+create key for cervice account  ## yc iam key create --service-account-id <id account> --folder-name <name folder service account> --output key.json
+
+
+
 ### 1.Preparing yandex-cloud 
 
 - download terraform 
@@ -11,7 +21,8 @@ on linux_amd64
 ```
 curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
 ```
-init profile
+1)
+- first create  profile account and init yandex
 ```
 yc init
 ```
@@ -19,16 +30,28 @@ yc init
 - enter name
 - go to linc and copy token
 - create folder
-
+2)
 - create service account for yandex-cloud
 ```
 yc iam service-account create --name <name_service_account>
 ```
 - add role for sa
 ```
-yc resource-manager <category_resources> add-access-binding <name_resources> --role <indeficator_role> 
-  --subject serviceAccount:<identificator_service_account>
+yc resource-manager <category_resources/folder/cloud> add-access-binding <name_folder> --role <editor> 
+  --subject serviceAccount:<id_service_account>
 ```
+example 
+```
+done (3s)
+effective_deltas:
+  - action: ADD
+    access_binding:
+      role_id: editor
+      subject:
+        id: aje1
+        type: serviceAccount
+```
+
 - list service account
 ```
 yc iam service-account list
@@ -44,10 +67,7 @@ yc resource-manager folder list <folder id>
 ```
 yc iam key create --service-account-id <id account> --folder-name <name folder service account> --output key.json
 ```
-- create profile for yandex cli
-```
-yc config profile create localadm  
-```
+
 - create config
 ```
 yc config set service-account-key key.json       #  use save .../key.json
