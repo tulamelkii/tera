@@ -1,0 +1,27 @@
+---
+# tasks file for mod_forwd
+
+- name: add module overlay
+  modprobe:
+    name: overlay
+    state: present
+- name: add module br_netfilter
+  modprobe:
+    name: br_netfilter
+    state: present
+- name:
+  lineinfile:
+    path: /etc/modules
+    line: "{{ item }}"
+  with_items:
+    -  overlay
+    -  br_netfilter
+###forward
+- name: enable forwarding  
+  sysctl:
+    name: net.ipv4.conf.all.forwarding
+    value: '1'
+    state: present 
+    
+
+

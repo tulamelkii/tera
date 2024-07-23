@@ -1,0 +1,30 @@
+---
+# tasks file for ntp
+- name:
+  apt:
+    name: ntp
+    state: latest
+- name:
+  timezone:
+    name: Europe/Moscow
+    hwclock: UTC
+- name:
+  template:
+    src: ntp.j2
+    dest: /etc/ntpsec/ntp.conf
+
+- name: restart
+  service:
+    name: ntp
+    state: restarted
+    enabled: true
+
+- name: create hosts
+  template:
+    src: hosts
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: '644'
+
+...

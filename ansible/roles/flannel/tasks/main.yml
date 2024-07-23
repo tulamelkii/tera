@@ -1,0 +1,15 @@
+---
+# tasks file for flannel
+
+- name: download yaml flanel
+  get_url:
+    url: "https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml"
+    dest:  "$HOME/kube-flannel.yml"
+
+- name: install flannel
+  k8s:
+    state: present
+    src: "$HOME/kube-flannel.yml"
+
+
+

@@ -1,0 +1,23 @@
+---
+# tasks file for update
+- name:
+  apt:
+    name:
+      - software-properties-common
+      - apt-transport-https
+      - ca-certificates
+      - gnupg2
+      - gpg
+      - sudo
+      - wget
+      - python3-jsonpatch
+      - python3-kubernetes
+      - open-iscsi
+      - nfs-common
+      - bridge-utils
+    update_cache: yes
+
+
+
+
+
