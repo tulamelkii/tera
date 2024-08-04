@@ -1,0 +1,3 @@
+---
+# vars file for cri-o
+PROJECT_PATH: 'prerelease:/main'

@@ -1,0 +1,18 @@
+---
+# tasks file for k8s_repo
+
+- name: Download key
+  get_url:
+    url: https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
+    dest: /etc/apt/keyrings/kubernetes-apt-keyring.asc
+- name: Import gpg.key
+  apt_key:
+    file: /etc/apt/keyrings/kubernetes-apt-keyring.asc
+    state: present
+- name: Add repo kubernetis
+  apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /"
+    state: present
+- name: update packages
+  apt:
+    update_cache: yes

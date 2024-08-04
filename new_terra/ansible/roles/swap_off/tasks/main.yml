@@ -1,0 +1,14 @@
+---
+# tasks file for swap_off
+- name: Disable SWAP
+  shell:
+    cmd: |
+      swapoff -a
+  args:
+    executable: /bin/bash
+
+- name: Disable SWAP 
+  replace:
+    path: /etc/fstab
+    regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+    replace: '# \1' 
