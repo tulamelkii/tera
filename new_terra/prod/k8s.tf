@@ -29,42 +29,42 @@ resource "yandex_resourcemanager_folder" "tera" {
 }
 
 
-resource "yandex_iam_service_account" "service-account" {
-  name        =  local.sa_name
-  folder_id   =  yandex_resourcemanager_folder.tera.id
-  description = "service account from folder k8s-terra"
-  depends_on  = [yandex_resourcemanager_folder.tera]
-}
-resource "yandex_resourcemanager_folder_iam_member" "admin" {
-  folder_id  =  yandex_resourcemanager_folder.tera.id
-  role       =  local.role_sa
-  member     = "serviceAccount:${yandex_iam_service_account.service-account.id}"
-  depends_on = [yandex_iam_service_account.service-account]
-}
-
-######################create service-access and s3 storage #########################
-
-resource "yandex_iam_service_account_static_access_key" "access_key" {
-service_account_id = yandex_iam_service_account.service-account.id
-
-}
-
-resource "yandex_storage_bucket" "test" {
-  access_key            = yandex_iam_service_account_static_access_key.access_key.access_key
-  secret_key            = yandex_iam_service_account_static_access_key.access_key.secret_key
-  bucket                = var.bucket
-  max_size              = var.max_size
-  default_storage_class = var.default_storage_class
-  folder_id = yandex_resourcemanager_folder.tera.id
- 
-anonymous_access_flags {
-  read        = true
-  list        = true
-  config_read = true
-  }
-}
-
-##########################CREATE_NETWORK############################################
+#resource "yandex_iam_service_account" "service-account" {
+#  name        =  local.sa_name
+#  folder_id   =  yandex_resourcemanager_folder.tera.id
+#  description = "service account from folder k8s-terra"
+#  depends_on  = [yandex_resourcemanager_folder.tera]
+#}
+#resource "yandex_resourcemanager_folder_iam_member" "admin" {
+#  folder_id  =  yandex_resourcemanager_folder.tera.id
+#  role       =  local.role_sa
+#  member     = "serviceAccount:${yandex_iam_service_account.service-account.id}"
+#  depends_on = [yandex_iam_service_account.service-account]
+#}
+#
+#######################create service-access and s3 storage #########################
+#
+#resource "yandex_iam_service_account_static_access_key" "access_key" {
+#service_account_id = yandex_iam_service_account.service-account.id
+#
+#}
+#
+#resource "yandex_storage_bucket" "test" {
+#  access_key            = yandex_iam_service_account_static_access_key.access_key.access_key
+#  secret_key            = yandex_iam_service_account_static_access_key.access_key.secret_key
+#  bucket                = var.bucket
+#  max_size              = var.max_size
+#  default_storage_class = var.default_storage_class
+#  folder_id = yandex_resourcemanager_folder.tera.id
+# 
+#anonymous_access_flags {
+#  read        = true
+#  list        = true
+#  config_read = true
+#  }
+#}
+#
+###########################CREATE_NETWORK############################################
 #
 #
 #resource "yandex_vpc_network" "vpc_k8s_net" {
@@ -82,12 +82,13 @@ anonymous_access_flags {
 #  network_id     = yandex_vpc_network.vpc_k8s_net.id
 #  zone           = "ru-central1-a"
 #}
+#
 ############################localinventory##########################################
 #
 #
 #resource "local_file" "inventory" {
-#depends_on = [yandex_compute_instance_group.control, yandex_compute_instance_group.worker]
-#content = templatefile("${path.module}/templates/inventory.tpl",
+#  depends_on = [yandex_compute_instance_group.control, yandex_compute_instance_group.worker]
+#  content = templatefile("${path.module}/templates/inventory.tpl",
 #          {
 #  control = yandex_compute_instance_group.control.instances[*].network_interface[0].nat_ip_address
 #  worker = yandex_compute_instance_group.worker.instances[*].network_interface[0].nat_ip_address
@@ -110,29 +111,34 @@ anonymous_access_flags {
 #  network_id = yandex_vpc_network.vpc_k8s_net.id
 #  folder_id  = yandex_resourcemanager_folder.tera.id
 #
-#
-#  ingress {
+#dynamic "ingress" {
+#   for_each = ["80","8080","22"]
+#   content {
 #    protocol       = "tcp"
 #    description    = "Allow SSH from anywhere"
-#    from_port      = 22
-#    to_port        = 22
+#    from_port      = ingress.value
+#    to_port        = ingress.value
 #    v4_cidr_blocks = ["0.0.0.0/0"]
 #  }
-#
-#  egress {
+#}
+#dynamic "egress" {
+#  for_each = ["80","8080","22", "53"]
+#  content {
 #    protocol       = "tcp"
 #    description    = "Allow all outbound traffic"
-#    from_port      = 0
-#    to_port        = 65535
+#    from_port      = egress.value
+#    to_port        = egress.value
 #    v4_cidr_blocks = ["0.0.0.0/0"]
 #  }
+#}
+#
 #}
 ############## Instance group control#########################################
 #
 #resource "yandex_compute_instance_group" "control" {
 #  folder_id          = yandex_resourcemanager_folder.tera.id
 #  name               = "control"
-#  service_account_id = yandex_iam_service_account.iam-service.id
+#  service_account_id = yandex_iam_service_account.service-account.id
 #  depends_on = [yandex_resourcemanager_folder_iam_member.admin
 #  ]
 #
@@ -184,8 +190,8 @@ anonymous_access_flags {
 #resource "yandex_compute_instance_group" "worker" {
 #  folder_id          = yandex_resourcemanager_folder.tera.id
 #  name               = "worker"
-#  service_account_id = yandex_iam_service_account.iam-service.id
-#  depends_on         = [yandex_resourcemanager_folder_iam_member.admin]
+#  service_account_id = yandex_iam_service_account.service-account.id
+#  depends_on         = [yandex_resourcemanager_folder_iam_member.admin, yandex_compute_instance_group.control ]
 #
 #  instance_template {
 #    resources {

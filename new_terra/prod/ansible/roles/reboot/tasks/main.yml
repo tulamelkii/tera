@@ -1,0 +1,9 @@
+---
+# tasks file for reboot
+
+
+- name: Reboot
+  reboot:
+    msg: "ansible_os_family"
+    pre_reboot_delay: 0
+    post_reboot_delay: 30

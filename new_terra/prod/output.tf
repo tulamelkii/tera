@@ -1,3 +1,3 @@
-output "folder_id" {
-  value = yandex_resourcemanager_folder.tera.id
-}
+#output "folder_id" {
+#  value = yandex_resourcemanager_folder.tera.id
+#}

@@ -1,0 +1,10 @@
+---
+# tasks file for init_worker
+#
+
+- name: join cluster
+  shell:  "{{ join_command }} >> node_join.log"
+  args:
+    chdir: $HOME
+    creates: node_joined.txt
+
