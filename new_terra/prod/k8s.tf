@@ -171,9 +171,6 @@ resource "yandex_compute_instance_group" "control" {
 
     metadata = {
       ssh-keys     = "${var.user_name_ssh}:${file(var.ssh_path)}"
-      #  ssh-keys  = "localadm:${file(var.ssh.path)}"
-      # user-data = "${file("/home/localadm/github/tulamelkii_repo/kubernetes-logging/local.txt")}"
-
     }
   }
 
@@ -228,9 +225,6 @@ resource "yandex_compute_instance_group" "worker" {
 
     metadata = {
       ssh-keys     = "${var.user_name_ssh}:${file(var.ssh_path)}"
-      #  ssh-keys  = "localadm:${file(var.ssh.path)}"
-      # user-data = "${file("/home/localadm/github/tulamelkii_repo/kubernetes-logging/local.txt")}"
-
     }
   }
 
@@ -250,59 +244,3 @@ resource "yandex_compute_instance_group" "worker" {
   }
 }
 
-
-
-
-
-
-#################################WORKER_GROUP#########################################
-#
-#resource "yandex_compute_instance_group" "worker" {
-#  folder_id          = yandex_resourcemanager_folder.tera.id
-#  name               = "worker"
-#  service_account_id = yandex_iam_service_account.service-account.id
-#  depends_on         = [yandex_resourcemanager_folder_iam_member.admin, yandex_compute_instance_group.control ]
-#
-#  instance_template {
-#    resources {
-#      memory = 2
-#      cores  = 2
-#    }
-#
-#    boot_disk {
-#      mode = "READ_WRITE"
-#      initialize_params {
-#        image_id = "fd89nebr9a651021u19i"
-#        size     = 15
-#      }
-#    }
-#
-#    network_interface {
-#      network_id = yandex_vpc_network.vpc_k8s_net.id
-#      subnet_ids = ["${yandex_vpc_subnet.vpc_k8s_sub.id}"]
-#      nat        = true
-#
-#    }
-#
-#    metadata = {
-#      ssh-keys  = "localadm:${file("/home/localadm/.ssh/id_ed25519.pub")}"
-#      # user-data = "${file("/home/localadm/github/tulamelkii_repo/kubernetes-logging/local.txt")}"
-#    }
-#  }
-#
-#  scale_policy {
-#    fixed_scale {
-#      size = 2
-#    }
-#  }
-#
-#  allocation_policy {
-#    zones = ["ru-central1-a"]
-#  }
-#
-#  deploy_policy {
-#    max_unavailable = 1
-#    max_expansion   = 0
-#  }
-#}
-#
