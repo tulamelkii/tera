@@ -147,7 +147,6 @@ variable "max_unavailable_w" {
   type         =  number
 }
 
-
 variable "max_expansion_w" {
   description  = "max_expansion"
   type         =  number
