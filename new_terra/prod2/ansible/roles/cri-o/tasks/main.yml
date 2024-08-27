@@ -1,0 +1,28 @@
+---
+# tasks file for cri-o
+- name: add repo cri-o
+  get_url:
+    url:  'https://pkgs.k8s.io/addons:/cri-o:/{{ PROJECT_PATH }}/deb/Release.key' 
+    dest:  /etc/apt/keyrings/cri-o-apt-keyring.asc
+- name: Import asc.key 
+  apt_key:
+    file:  /etc/apt/keyrings/cri-o-apt-keyring.asc
+    state: present
+- name: Add repo kubernetis
+  apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/cri-o-apt-keyring.asc] https://pkgs.k8s.io/addons:/cri-o:/{{ PROJECT_PATH }}/deb/ /"
+    state: present
+- name: update packages
+  apt:
+    name: cri-o
+    update_cache: yes
+- name: service cri-o
+  service:
+    name: crio
+    state: started    
+    enabled: yes
+
+
+
+
+

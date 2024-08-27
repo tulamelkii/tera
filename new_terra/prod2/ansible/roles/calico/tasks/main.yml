@@ -1,0 +1,26 @@
+---
+# tasks file for Calico
+- name: download yaml calico
+  get_url:
+    url: "{{ item.url }}"
+    dest:  "{{ item.dest }}"
+  with_items:
+    - { url: "https://raw.githubusercontent.com/projectcalico/calico/v3.27.3/manifests/tigera-operator.yaml", dest: $HOME/tigera-operator.yaml }
+      #  - { url: "https://raw.githubusercontent.com/projectcalico/calico/v3.27.3/manifests/custom-resources.yaml", dest: "/tmp/custom-resources.yaml" }
+
+- name: install yaml calico
+  k8s:
+    state: present
+    src: $HOME/tigera-operator.yaml
+
+- name: copy custom-resources.
+  template:
+    src: custom-resources.j2
+    dest: $HOME/custom-resources.yaml
+- name: install yaml calico
+  k8s:
+    state: present
+    src: $HOME/custom-resources.yaml
+
+
+

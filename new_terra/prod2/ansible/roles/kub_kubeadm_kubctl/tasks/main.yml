@@ -1,0 +1,42 @@
+---
+# tasks file for kub_kubeadm_kubctl
+- name: install kubelet kubeadm kubectl
+  apt:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+      
+- name: Configure node ip
+  lineinfile:
+    path: /etc/default/kubelet
+    #  line: KUBELET_EXTRA_ARGS=--node-ip={{ ansible_enp0s9.ipv4.address }}
+    line: KUBELET_EXTRA_ARGS=--node-ip={{ ansible_eth0.ipv4.address }}
+
+    create: yes
+- name: Restart kubelet
+  service:
+    name: kubelet
+    daemon_reload: yes
+    state: restarted
+
+# hold kubelet kubeadm kubectl
+- name: Hold kubelet
+  dpkg_selections:
+    name: kubelet
+    selection: hold
+- name: Hold kubeadm
+  dpkg_selections:
+    name: kubeadm
+    selection: hold
+- name: Hold kubectl
+  dpkg_selections:
+    name: kubectl
+    selection: hold
+
+- name: start kubelet
+  service: 
+    name: kubelet
+    state: started
+    enabled: yes
+

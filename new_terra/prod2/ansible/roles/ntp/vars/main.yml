@@ -1,0 +1,5 @@
+---
+# vars file for ntp
+server_1: "ntp0.ntp-servers.net"
+server_2: "ntp2.ntp-servers.net"
+server_3: "ntp3.ntp-servers.net"
