@@ -1,48 +1,57 @@
 
-resource "yandex_compute_instance_group" "instgroup" {
-  folder_id          = yandex_resourcemanager_folder.tera.id
-  name               = var.group_name_c
-  service_account_id = yandex_iam_service_account.service-account.id
+terraform {
+  required_providers {
+    yandex = {
+      source = "yandex-cloud/yandex"
+    }
+  }
+}
 
+
+resource "yandex_compute_instance_group" "instgroup" {
+
+  folder_id          = var.folder_id
+  name               = var.group_name 
+  service_account_id = var.service_account_id
   instance_template {
     resources {
-      memory = var.resource_memory_c
-      cores  = var.resource_cores_c
+      memory = var.resource_memory
+      cores  = var.resource_cores 
     }
 
     boot_disk {
       mode = "READ_WRITE"
       initialize_params {
-        image_id = data.yandex_compute_image.debian_image.id
-        size_c     = var.size_c 
+        image_id = var.image_id
+        size     = var.size 
       }
     }
 
     network_interface {
-      network_id = yandex_vpc_network.vpc_k8s_net.id 
-      subnet_ids = yandex_vpc_subnet.vpc_k8s_sub.id 
+      network_id = var.network_id
+      subnet_ids = [var.subnet_ids]
       nat        = true
-      
+
     }
 
     metadata = {
-      ssh-keys     = "${var.user_name_ssh}:${file(var.ssh_path)}"
+      ssh-keys = "${var.user_name_ssh}:${file(var.ssh_path)}"
     }
   }
 
   scale_policy {
     fixed_scale {
-      size = var.scale_size_c
+      size = var.scale_size 
     }
   }
 
   allocation_policy {
-    zones = [var.zone]
+    zones = [var.zones]
   }
 
   deploy_policy {
-    max_unavailable = var.max_unavailable_c
-    max_expansion   = var.max_expansion_c
+    max_unavailable = var.max_unavailable  
+    max_expansion   = var.max_expansion
   }
 }
 
