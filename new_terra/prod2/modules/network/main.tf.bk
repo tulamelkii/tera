@@ -1,0 +1,26 @@
+terraform {
+  required_providers {
+    yandex = {
+      source = "yandex-cloud/yandex"
+    }
+  }
+}
+
+resource "yandex_vpc_network" "vpc_k8s_net" {
+  folder_id   = yandex_resourcemanager_folder.tera.id
+  name        = var.name_vpc
+  description = "virtual network cluster k8s for ru-central1-a"
+}
+
+
+resource "yandex_vpc_subnet" "vpc_k8s_sub" {
+  folder_id      = yandex_resourcemanager_folder.tera.id
+  name           = var.name_vpc
+  description    = "virtual subnet cluster k8s for ru-central1-a"
+  v4_cidr_blocks = var.vpc_subnet
+  network_id     = yandex_vpc_network.vpc_k8s_net.id
+  zone           = var.zones
+
+}
+
+

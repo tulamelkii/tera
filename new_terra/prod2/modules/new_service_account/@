@@ -1,0 +1,21 @@
+variable "service_a" {
+  description = "Service account name"
+  type        = string
+}
+
+variable "folder_id" {
+  description = "Folder ID"
+  type        = string
+}
+
+variable "role" {
+  description = "role_service_account"
+  type        = string
+}
+
+variable "member" {
+  description = "member"
+  type        = string
+}
+
+

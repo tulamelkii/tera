@@ -1,5 +1,22 @@
+variable "cloud_id" {
+  description = "cloud_id"
+  type        = string
+}
 
 
+variable "folder_name" {
+}
+
+variable "name_service_a" {
+ description = "Service account name"
+  type        = string
+}
+
+variable "role" {
+  description = "role_service_account"
+  type        = string
+}
+#####################################
 variable "bucket" {
   description = "bucket"
   type        = string
@@ -16,17 +33,16 @@ variable "default_storage_class" {
   description = "class storage"
   default     = "STANDARD"
 }
-
+#####################Module_network##################
 variable "name_vpc" {
-  description = "name_vpc"
-  type        = string
+  #  description = "name_vpc"
+  # type        = string
 }
+variable "v4_cidr_blocks" { }
 
-variable "vpc_subnet" {
-  description = "cidr_vpc_subnet"
-  type        = list(string)
-}
 
+
+########################################
 
 variable "ansible_user" {
   description = "ansible_user_"
@@ -57,7 +73,7 @@ variable "user_name_ssh" {}
 variable "ssh_path" {}
 
 variable "zones" {}
-
+##########WAR_CONTROL#############
 variable "famili_images_c" {}
 
 variable "group_name_c" {}
@@ -73,7 +89,7 @@ variable "size_c" {}
 variable "max_unavailable_c" {}
 
 variable "max_expansion_c" {}
-
+##########WAR_WORKER##############
 variable "famili_images_w" {}
 
 variable "group_name_w" {}
@@ -89,6 +105,26 @@ variable "size_w" {}
 variable "max_unavailable_w" {}
 
 variable "max_expansion_w" {}
+
+#########WAR_HAPROXY#############
+
+variable "famili_images_h" {}
+
+variable "group_name_h" {}
+
+variable "resource_memory_h" {}
+
+variable "resource_cores_h" {}
+
+variable "scale_size_h" {}
+
+variable "size_h" {}
+
+variable "max_unavailable_h" {}
+
+variable "max_expansion_h" {}
+
+
 
 
 
