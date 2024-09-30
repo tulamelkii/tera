@@ -1,3 +1,5 @@
+
+
 terraform {
   required_providers {
     yandex = {
@@ -10,6 +12,11 @@ terraform {
 provider "yandex" {
   zone = var.zones
 }
+
+
+#data "yandex_resourcemanager_folder" "tera" {
+# name = var.folder_name
+#}
 
 
 resource "yandex_resourcemanager_folder" "tera" {
@@ -33,7 +40,7 @@ resource "yandex_resourcemanager_folder_iam_member" "admin" {
   member     = "serviceAccount:${module.new_service_account.service_account_id}"
   depends_on = [module.new_service_account]
 }
-#################################################
+##############################################
 
 
 resource "yandex_iam_service_account_static_access_key" "access_key" {
@@ -53,7 +60,7 @@ module "s3" {
   depends_on            = [yandex_resourcemanager_folder_iam_member.admin]
 }
 
-#########CREATE_NETWORK############################
+#########################CREATE_NETWORK############################################
 module "networks" {
   source         = "./modules/network"
   folder_id      = yandex_resourcemanager_folder.tera.id
@@ -62,15 +69,15 @@ module "networks" {
   network_id     = module.networks.network_id
   zones          = var.zones
 }
-#########localinventory############################
+############################localinventory##########################################
+
 
 resource "local_file" "inventory" {
   depends_on = [module.instance_group_c, module.instance_group_w, module.instance_group_h]
   content = templatefile("./templates/inventory.tpl",
           {
-  control = module.instance_group_c.ips
-  worker  = module.instance_group_w.ips
-  haproxy = module.instance_group_w.ips
+  control = module.instance_group_c.instances[*].network_interface[0].nat_ip_address
+  worker =  module.instance_group_c.instances[*].network_interface[0].nat_ip_address
   ansible_user = var.ansible_user
   ansible_private_key_file = var.ssh_path
           }
@@ -83,7 +90,8 @@ filename = "./ansible/inventory"
   }
 }
 
-##################################################
+
+#########################################################################
 module "security_group" {
   source              = "./modules/secgroup"
   name_security_group = var.name_security_group
@@ -95,10 +103,10 @@ module "security_group" {
   cidr_block_all      = var.cidr_block_all
 }
 
+
 data "yandex_compute_image" "debian_image" {
   family = var.famili_images_c
 }
-
 module "instance_group_c" {
   source             = "./modules/instance_group"
   group_name         = var.group_name_c
@@ -119,10 +127,10 @@ module "instance_group_c" {
   depends_on         = [yandex_resourcemanager_folder_iam_member.admin]
 }
 
+
 data "yandex_compute_image" "debian_image2" {
   family = var.famili_images_w
 }
-
 
 module "instance_group_w" {
   source             = "./modules/instance_group"
@@ -143,17 +151,6 @@ module "instance_group_w" {
   subnet_ids         = module.networks.subnetwork_id
   depends_on         = [yandex_resourcemanager_folder_iam_member.admin]
 }
-
-
-#data "yandex_compute_instance_group" "group_w" {
-#  instance_group_id = module.instance_group_w.instance_id
-#}
-#locals {
-#  instances_w = data.yandex_compute_instance_group.group_w.instances
-#}
-#output "grpoup_w" {
-#  value = [for instance in local.instances_w : instance.network_interface[0].nat_ip_address]
-#}
 
 
 data "yandex_compute_image" "debian_image3" {
@@ -179,14 +176,3 @@ module "instance_group_h" {
   subnet_ids         = module.networks.subnetwork_id
   depends_on         = [yandex_resourcemanager_folder_iam_member.admin]
 }
-
-
-#data "yandex_compute_instance_group" "group_h" {
-#  instance_group_id = module.instance_group_h.instance_id
-#}
-#locals {
-#  instances_h = data.yandex_compute_instance_group.group_h.instances
-#}
-#output "grpoup_h" {
-#  value = [for instance in local.instances_h : instance.network_interface[0].nat_ip_address]
-#}

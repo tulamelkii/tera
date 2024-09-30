@@ -18,3 +18,11 @@
 #}
 #
 
+#output "instance_id" {
+#  value =  yandex_compute_instance_group.instgroup.id
+#}
+
+output "ips" {
+  value = [for instance in yandex_compute_instance_group.instgroup.instances: instance.network_interface[0].nat_ip_address]
+}
+

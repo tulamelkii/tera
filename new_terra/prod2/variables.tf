@@ -16,23 +16,26 @@ variable "role" {
   description = "role_service_account"
   type        = string
 }
-#####################################
+#############S3#####################################
 variable "bucket" {
   description = "bucket"
   type        = string
 }
-
 
 variable "max_size" {
   description = "max_size_bucket"
   type        = string
 }
 
-
 variable "default_storage_class" {
   description = "class storage"
   default     = "STANDARD"
 }
+
+#variable "access_key" {}
+
+#variable "secret_key" {}
+
 #####################Module_network##################
 variable "name_vpc" {
   #  description = "name_vpc"
@@ -40,34 +43,37 @@ variable "name_vpc" {
 }
 variable "v4_cidr_blocks" { }
 
-
-
 ########################################
 
 variable "ansible_user" {
   description = "ansible_user_"
   type        = string
 }
-
-
-variable "sec_group_name" {
+######################################
+variable "name_security_group" {
   description = "name_security_group"
   type        = string
 }
 
-
-
-variable "protocol_sec_group" {
-  description = "protocol_network"
+variable "protocol" {
+  description = "protocol"
   type        = string
 }
-
 
 variable "cidr_block_all" {
   description = "cidr_block_allow_all"
   type        = list(string)
 }
+variable "ingress" {
+ description = "A list of ports to allow incoming traffic on"
+  type        = list(number)
+}
 
+variable "egress" {
+  description = "A list of ports to allow outgoing traffic on"
+  type        = list(number)
+}
+#######################################
 variable "user_name_ssh" {}
 
 variable "ssh_path" {}
@@ -123,7 +129,6 @@ variable "size_h" {}
 variable "max_unavailable_h" {}
 
 variable "max_expansion_h" {}
-
 
 
 
